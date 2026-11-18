@@ -1,0 +1,57 @@
+{
+ "food/tomato": {
+  "color": "red"
+ },
+ "food/apple": {
+  "color": "red"
+ },
+ "food/lemon": {
+  "color": "yellow"
+ },
+ "food/cheese": {
+  "color": "yellow"
+ },
+ "food/carrot": {
+  "color": "orange"
+ },
+ "food/orange": {
+  "color": "orange"
+ },
+ "food/cabbage": {
+  "color": "green"
+ },
+ "food/watermelon": {
+  "color": "green"
+ },
+ "food/fish": {
+  "tags": [
+   "fish",
+   "food",
+   "market"
+  ]
+ },
+ "chars/character-male-c": {
+  "note": "полицейский в фуражке — не для мирных жителей"
+ },
+ "chars/character-male-e": {
+  "note": "пожилой мужчина в очках, седой"
+ },
+ "chars/character-soldier": {
+  "note": "солдат"
+ },
+ "chars/character-knight": {
+  "note": "рыцарь"
+ },
+ "chars/character-zombie": {
+  "note": "зомби"
+ },
+ "chars/character-alien": {
+  "note": "пришелец"
+ },
+ "chars/character-robot": {
+  "note": "робот"
+ },
+ "chars/character-worker": {
+  "note": "рабочий в каске — герой-путник движка по умолчанию"
+ }
+}

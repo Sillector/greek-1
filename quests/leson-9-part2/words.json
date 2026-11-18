@@ -1,0 +1,466 @@
+{
+ "words": {
+  "pao_gia_psonia": {
+   "gr": "πάω για ψώνια",
+   "ru": "иду за покупками",
+   "alt": [],
+   "pos": "phrase"
+  },
+  "pao_volta": {
+   "gr": "πάω βόλτα",
+   "ru": "иду гулять",
+   "alt": [],
+   "pos": "phrase"
+  },
+  "pao_gia_kafe": {
+   "gr": "πάω για καφέ",
+   "ru": "иду на кофе",
+   "alt": [],
+   "pos": "phrase"
+  },
+  "pao_gia_ypno": {
+   "gr": "πάω για ύπνο",
+   "ru": "иду спать",
+   "alt": [],
+   "pos": "phrase"
+  },
+  "troo_proino": {
+   "gr": "τρώω πρωινό",
+   "ru": "завтракаю",
+   "alt": [],
+   "pos": "phrase"
+  },
+  "troo_mesimeriano": {
+   "gr": "τρώω μεσημεριανό",
+   "ru": "обедаю",
+   "alt": [],
+   "pos": "phrase"
+  },
+  "troo_vradino": {
+   "gr": "τρώω βραδινό",
+   "ru": "ужинаю",
+   "alt": [],
+   "pos": "phrase"
+  },
+  "pino_kafe": {
+   "gr": "πίνω καφέ",
+   "ru": "пью кофе",
+   "alt": [],
+   "pos": "phrase"
+  },
+  "magireyo": {
+   "gr": "μαγειρεύω",
+   "ru": "готовлю",
+   "alt": [],
+   "pos": "verb"
+  },
+  "akouo_mousiki": {
+   "gr": "ακούω μουσική",
+   "ru": "слушаю музыку",
+   "alt": [],
+   "pos": "phrase"
+  },
+  "vlepo_tileorasi": {
+   "gr": "βλέπω τηλεόραση",
+   "ru": "смотрю телевизор",
+   "alt": [],
+   "pos": "phrase"
+  },
+  "pao_sto_mathima": {
+   "gr": "πάω στο μάθημα",
+   "ru": "иду на урок",
+   "alt": [],
+   "pos": "phrase"
+  },
+  "pino_tsai": {
+   "gr": "πίνω τσάι",
+   "ru": "пью чай",
+   "alt": [],
+   "pos": "phrase"
+  },
+  "pino_chymo_portokali": {
+   "gr": "πίνω χυμό πορτοκάλι",
+   "ru": "пью апельсиновый сок",
+   "alt": [],
+   "pos": "phrase"
+  },
+  "pino_nero": {
+   "gr": "πίνω νερό",
+   "ru": "пью воду",
+   "alt": [],
+   "pos": "phrase"
+  },
+  "meletao": {
+   "gr": "μελετάω",
+   "ru": "занимаюсь (делаю дз)",
+   "alt": [],
+   "pos": "verb"
+  },
+  "diavazo": {
+   "gr": "διαβάζω",
+   "ru": "читаю (делаю дз)",
+   "alt": [],
+   "pos": "verb"
+  },
+  "plydirio_rouchon": {
+   "gr": "το πλυντήριο ρούχων",
+   "ru": "стиральная машина",
+   "alt": [],
+   "pos": "noun",
+   "gender": "n"
+  },
+  "plydirio_piaton": {
+   "gr": "το πλυντήριο πιάτων",
+   "ru": "посудомоечная машина",
+   "alt": [],
+   "pos": "noun",
+   "gender": "n"
+  },
+  "kainourgios": {
+   "gr": "καινούργιος",
+   "ru": "новый",
+   "alt": [],
+   "pos": "adv"
+  },
+  "palios": {
+   "gr": "παλιός",
+   "ru": "старый",
+   "alt": [],
+   "pos": "adv"
+  },
+  "se_prosfora": {
+   "gr": "σε προσφορά",
+   "ru": "по акции",
+   "alt": [],
+   "pos": "phrase"
+  },
+  "eggyisi": {
+   "gr": "η εγγύηση",
+   "ru": "гарантия",
+   "alt": [],
+   "pos": "noun",
+   "gender": "f"
+  },
+  "paradosi": {
+   "gr": "η παράδοση",
+   "ru": "доставка",
+   "alt": [],
+   "pos": "noun",
+   "gender": "f"
+  },
+  "tamio": {
+   "gr": "το ταμείο",
+   "ru": "касса",
+   "alt": [],
+   "pos": "noun",
+   "gender": "n"
+  },
+  "chrimata": {
+   "gr": "τα χρήματα",
+   "ru": "деньги",
+   "alt": [],
+   "pos": "noun",
+   "gender": "pl"
+  },
+  "metrita": {
+   "gr": "τα μετρητά",
+   "ru": "наличные",
+   "alt": [],
+   "pos": "noun",
+   "gender": "pl"
+  },
+  "evdomada": {
+   "gr": "η εβδομάδα",
+   "ru": "неделя",
+   "alt": [],
+   "pos": "noun",
+   "gender": "f"
+  },
+  "chronia": {
+   "gr": "τα χρόνια",
+   "ru": "годы",
+   "alt": [],
+   "pos": "noun",
+   "gender": "pl"
+  },
+  "nomizo": {
+   "gr": "νομίζω",
+   "ru": "думать / полагать",
+   "alt": [
+    "думать",
+    "полагать"
+   ],
+   "pos": "verb"
+  },
+  "se_dyo_meres": {
+   "gr": "σε δύο μέρες",
+   "ru": "через два дня",
+   "alt": [],
+   "pos": "phrase"
+  },
+  "akrivos": {
+   "gr": "ακριβός",
+   "ru": "дорогой",
+   "alt": [],
+   "pos": "adv"
+  },
+  "psachno": {
+   "gr": "ψάχνω",
+   "ru": "искать",
+   "alt": [],
+   "pos": "verb"
+  },
+  "plirono": {
+   "gr": "πληρώνω",
+   "ru": "платить",
+   "alt": [],
+   "pos": "verb"
+  },
+  "pairno": {
+   "gr": "παίρνω",
+   "ru": "брать / забирать",
+   "alt": [
+    "брать",
+    "забирать"
+   ],
+   "pos": "verb"
+  },
+  "den_douleyi_pia": {
+   "gr": "δεν δουλεύει πια",
+   "ru": "больше не работает",
+   "alt": [],
+   "pos": "phrase"
+  },
+  "gia_posa_kila": {
+   "gr": "για πόσα κιλά;",
+   "ru": "на сколько килограммов?",
+   "alt": [
+    "на сколько килограммов"
+   ],
+   "pos": "phrase"
+  },
+  "gia_posa_chrimata": {
+   "gr": "για πόσα χρήματα;",
+   "ru": "на какую сумму?",
+   "alt": [
+    "на какую сумму"
+   ],
+   "pos": "phrase"
+  },
+  "gyro_sta_300_me_400_eyro": {
+   "gr": "γύρω στα 300 με 400 ευρώ",
+   "ru": "примерно 300–400 евро",
+   "alt": [],
+   "pos": "verb"
+  },
+  "arketa_kali_prosfora": {
+   "gr": "αρκετά καλή προσφορά",
+   "ru": "довольно хорошее предложение",
+   "alt": [],
+   "pos": "phrase"
+  },
+  "vevaios": {
+   "gr": "βεβαίως",
+   "ru": "конечно",
+   "alt": [],
+   "pos": "adv"
+  },
+  "tamio_inai_eki": {
+   "gr": "το ταμείο είναι εκεί",
+   "ru": "касса там",
+   "alt": [],
+   "pos": "noun",
+   "gender": "n"
+  },
+  "psygio": {
+   "gr": "το ψυγείο",
+   "ru": "холодильник",
+   "alt": [],
+   "pos": "noun",
+   "gender": "n"
+  },
+  "klimatistiko": {
+   "gr": "το κλιματιστικό",
+   "ru": "кондиционер",
+   "alt": [],
+   "pos": "noun",
+   "gender": "n"
+  },
+  "anemistiras": {
+   "gr": "ο ανεμιστήρας",
+   "ru": "вентилятор",
+   "alt": [],
+   "pos": "noun",
+   "gender": "m"
+  },
+  "thermosifonas": {
+   "gr": "ο θερμοσίφωνας",
+   "ru": "бойлер, водонагреватель",
+   "alt": [
+    "бойлер",
+    "водонагреватель"
+   ],
+   "pos": "noun",
+   "gender": "m"
+  },
+  "katastima": {
+   "gr": "το κατάστημα",
+   "ru": "магазин",
+   "alt": [],
+   "pos": "noun",
+   "gender": "n"
+  },
+  "tha_ithela": {
+   "gr": "θα ήθελα",
+   "ru": "я бы хотел(-а)",
+   "alt": [],
+   "pos": "phrase"
+  },
+  "prosfora": {
+   "gr": "η προσφορά",
+   "ru": "акция",
+   "alt": [],
+   "pos": "noun",
+   "gender": "f"
+  },
+  "dieythynsi": {
+   "gr": "η διεύθυνση",
+   "ru": "адрес",
+   "alt": [],
+   "pos": "noun",
+   "gender": "f"
+  },
+  "ypnodomatio": {
+   "gr": "το υπνοδωμάτιο",
+   "ru": "спальня",
+   "alt": [],
+   "pos": "noun",
+   "gender": "n"
+  },
+  "idsa": {
+   "gr": "η ίντσα",
+   "ru": "дюйм",
+   "alt": [],
+   "pos": "noun",
+   "gender": "f"
+  },
+  "protimo": {
+   "gr": "προτιμώ",
+   "ru": "предпочитаю",
+   "alt": [],
+   "pos": "verb"
+  },
+  "inai_se_prosfora": {
+   "gr": "Είναι σε προσφορά.",
+   "ru": "Это по акции.",
+   "alt": [
+    "Это по акции"
+   ],
+   "pos": "phrase"
+  },
+  "echi_eggyisi_tria_chronia": {
+   "gr": "έχει εγγύηση τρία χρόνια",
+   "ru": "гарантия три года",
+   "alt": [],
+   "pos": "phrase"
+  },
+  "me_metrita": {
+   "gr": "με μετρητά",
+   "ru": "наличными",
+   "alt": [],
+   "pos": "phrase"
+  },
+  "me_karta": {
+   "gr": "με κάρτα",
+   "ru": "картой",
+   "alt": [],
+   "pos": "phrase"
+  },
+  "dosis": {
+   "gr": "οι δόσεις",
+   "ru": "рассрочка, платежи в рассрочку",
+   "alt": [
+    "рассрочка",
+    "платежи в рассрочку"
+   ],
+   "pos": "noun",
+   "gender": "pl"
+  },
+  "kano_dosis": {
+   "gr": "κάνω δόσεις",
+   "ru": "предоставляю рассрочку",
+   "alt": [],
+   "pos": "phrase"
+  },
+  "kanete_dosis": {
+   "gr": "Κάνετε δόσεις;",
+   "ru": "У вас есть рассрочка?",
+   "alt": [
+    "У вас есть рассрочка"
+   ],
+   "pos": "phrase"
+  }
+ },
+ "order": [
+  "pao_gia_psonia",
+  "pao_volta",
+  "pao_gia_kafe",
+  "pao_gia_ypno",
+  "troo_proino",
+  "troo_mesimeriano",
+  "troo_vradino",
+  "pino_kafe",
+  "magireyo",
+  "akouo_mousiki",
+  "vlepo_tileorasi",
+  "pao_sto_mathima",
+  "pino_tsai",
+  "pino_chymo_portokali",
+  "pino_nero",
+  "meletao",
+  "diavazo",
+  "plydirio_rouchon",
+  "plydirio_piaton",
+  "kainourgios",
+  "palios",
+  "se_prosfora",
+  "eggyisi",
+  "paradosi",
+  "tamio",
+  "chrimata",
+  "metrita",
+  "evdomada",
+  "chronia",
+  "nomizo",
+  "se_dyo_meres",
+  "akrivos",
+  "psachno",
+  "plirono",
+  "pairno",
+  "den_douleyi_pia",
+  "gia_posa_kila",
+  "gia_posa_chrimata",
+  "gyro_sta_300_me_400_eyro",
+  "arketa_kali_prosfora",
+  "vevaios",
+  "tamio_inai_eki",
+  "psygio",
+  "klimatistiko",
+  "anemistiras",
+  "thermosifonas",
+  "katastima",
+  "tha_ithela",
+  "prosfora",
+  "dieythynsi",
+  "ypnodomatio",
+  "idsa",
+  "protimo",
+  "inai_se_prosfora",
+  "echi_eggyisi_tria_chronia",
+  "me_metrita",
+  "me_karta",
+  "dosis",
+  "kano_dosis",
+  "kanete_dosis"
+ ]
+}

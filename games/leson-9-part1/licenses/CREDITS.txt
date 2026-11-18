@@ -1,0 +1,11 @@
+«Λεμονιές — Лимонный квартал» — собрано движком game-greek.
+
+Модели: Kenney (www.kenney.nl), лицензия CC0:
+  Kenney Mini Characters
+  Kenney City Kit (Commercial)
+  Kenney Food Kit
+  Kenney Furniture Kit
+  Kenney Nature Kit
+  Kenney City Kit (Suburban)
+
+3D: three.js r147 (MIT), licenses/three.js-LICENSE.txt

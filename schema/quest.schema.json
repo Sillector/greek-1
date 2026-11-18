@@ -1,0 +1,218 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "game-greek/quest.schema.json",
+  "title": "Квест движка game-greek",
+  "description": "quests/<slug>/quest.json. Пояснения к полям — docs/content-schema.md. Смысловые проверки (тултипы, покрытие, прогон, утверждения о сцене) делает tools/validate.js.",
+  "type": "object",
+  "required": ["meta", "intro", "words", "pages", "gloss", "world", "npcs", "signs", "quests", "mystery", "finale", "claims"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["slug", "saveKey", "title", "titleGr", "titleRu", "cover", "mysteryBtn"],
+      "properties": {
+        "slug": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "saveKey": { "type": "string", "pattern": "^[a-z0-9-]+$", "description": "ключ localStorage, уникальный на игру; им же шифруются ответы" },
+        "title": { "type": "string" }, "titleGr": { "type": "string" }, "titleRu": { "type": "string" },
+        "kicker": { "type": "string" }, "cover": { "type": "string" },
+        "mysteryBtn": { "type": "string", "description": "короткое имя главной задачи на кнопке и вкладке: «Песня», «Надпись», «Рецепт»" },
+        "lockedText": { "type": "string" }, "level": { "type": "string" },
+        "theme": { "type": "object", "additionalProperties": { "type": "string" }, "description": "CSS-переменные (--blue, --lemon ...)" }
+      }
+    },
+    "intro": {
+      "type": "object", "required": ["title", "paragraphs"],
+      "properties": { "title": { "type": "string" }, "paragraphs": { "type": "array", "items": { "type": "string" } }, "button": { "type": "string" }, "enter": { "type": "string" }, "hint": { "type": "string" } }
+    },
+    "words": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[a-z0-9_]+$" },
+      "additionalProperties": {
+        "type": "object", "required": ["gr", "ru"],
+        "properties": {
+          "gr": { "type": "string", "description": "словарная форма, как в списке ученика: «η πόλη», «μικρός, -ή, -ό»" },
+          "ru": { "type": "string" },
+          "alt": { "type": "array", "items": { "type": "string" }, "description": "другие принимаемые переводы (2–6)" },
+          "pos": { "enum": ["noun", "verb", "adj", "adv", "phrase", "day", "num", "other"] },
+          "gender": { "enum": ["m", "f", "n"] },
+          "picto": { "type": "string", "description": "id пиктограммы: assets/pictos/<id>.svg или quests/<slug>/pictos/<id>.svg" },
+          "claimKind": { "enum": ["size", "price", "near", "place", "color", "count", "time"], "description": "слово проверяемо глазами — каждая фраза с ним требует утверждения в claims" }
+        }
+      }
+    },
+    "pages": {
+      "type": "array",
+      "items": { "type": "object", "required": ["id", "title", "words"], "properties": { "id": { "type": "string" }, "title": { "type": "string" }, "words": { "type": "array", "minItems": 3, "maxItems": 5, "items": { "type": "string" } } } }
+    },
+    "gloss": { "type": "object", "additionalProperties": { "type": "array", "prefixItems": [{ "type": "string" }, { "type": "string" }], "minItems": 2, "maxItems": 2 }, "description": "форма -> [словарная форма, перевод]" },
+    "names": { "type": "object", "additionalProperties": { "type": "string" } },
+    "world": {
+      "type": "object", "required": ["start", "zones"],
+      "properties": {
+        "start": { "type": "string" },
+        "layout": { "type": "object", "properties": { "type": { "enum": ["free", "ring", "line", "grid"] }, "r": { "type": "number" }, "step": { "type": "number" }, "cols": { "type": "integer" }, "start": { "type": "number" } } },
+        "bound": { "type": "number" },
+        "walkSpeed": { "type": "number" }, "runSpeed": { "type": "number" },
+        "heroModel": { "type": "string" }, "doorColor": { "type": "string" },
+        "cover": { "type": "object", "properties": { "at": { "$ref": "#/$defs/xz" }, "d": { "type": "number" } } },
+        "env": {
+          "type": "object",
+          "properties": {
+            "time": { "enum": ["day", "evening", "night"] },
+            "groundColor": { "type": "string" }, "fog": { "type": "string" },
+            "weather": { "enum": ["clear", "rain", "snow"] },
+            "birds": { "type": "integer" },
+            "warmNature": { "type": "boolean" },
+            "sky": { "type": "object" },
+            "recolor": { "type": "object", "additionalProperties": { "type": "object", "properties": { "green": { "type": "string" } } } },
+            "backdrop": { "type": "array", "items": { "type": "object", "required": ["kind"], "properties": { "kind": { "enum": ["city", "hills", "mountains", "forest", "sea"] }, "dir": { "type": "number" }, "spread": { "type": "number" }, "r": { "type": "number" }, "n": { "type": "integer" }, "color": { "type": "string" } } } }
+          }
+        },
+        "paths": { "type": "array", "items": { "type": "object", "properties": { "from": { "type": "string" }, "to": { "type": "string" }, "fromAt": { "$ref": "#/$defs/xz" }, "toAt": { "$ref": "#/$defs/xz" }, "via": { "type": "array", "items": { "$ref": "#/$defs/xz" } }, "w": { "type": "number" }, "ground": { "$ref": "#/$defs/ground" } } } },
+        "water": { "type": "array", "items": { "type": "object", "properties": { "rect": { "type": "array", "items": { "type": "number" }, "minItems": 4, "maxItems": 4 }, "circle": { "type": "array", "items": { "type": "number" }, "minItems": 3, "maxItems": 3 }, "level": { "type": "number" }, "color": { "type": "string" }, "shore": { "type": ["string", "boolean"] } } } },
+        "props": { "type": "array", "items": { "$ref": "#/$defs/prop" } },
+        "zones": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/zone" } }
+      }
+    },
+    "npcs": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object", "required": ["name", "gender", "zone", "at", "lines"],
+        "properties": {
+          "name": { "type": "string", "description": "имя по-гречески (его тоже нужно занести в names)" },
+          "ru": { "type": "string" }, "gender": { "enum": ["f", "m"] },
+          "model": { "type": "string" }, "zone": { "type": "string" }, "at": { "$ref": "#/$defs/xz" }, "rot": { "type": "number" },
+          "pitch": { "type": "number" }, "rate": { "type": "number" },
+          "hold": { "type": "string" }, "holdH": { "type": "number" }, "anim": { "type": "string" },
+          "looks": { "type": "object" },
+          "lines": { "type": "array", "items": { "type": "object", "required": ["t"], "properties": { "t": { "type": "string" }, "req": { "type": "string" }, "until": { "type": "string" }, "reqMystery": { "type": "boolean" }, "story": { "type": "boolean" } } } },
+          "shop": { "type": "array", "description": "житель — торговец: что продаёт (кнопка «Купить» в разговоре)", "items": { "type": "object", "required": ["item", "price"], "properties": { "item": { "type": "string", "description": "id из items" }, "price": { "type": "number", "description": "цена за штуку, €" }, "req": { "type": "string" }, "until": { "type": "string" } } } }
+        }
+      }
+    },
+    "signs": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object", "required": ["title", "lines", "place"],
+        "properties": {
+          "title": { "type": "string" }, "style": { "enum": ["wood", "plate", "chalk", "paper", "cork", "metal", "stone"] },
+          "lines": { "type": "array", "items": { "type": "string" } },
+          "place": { "type": "object", "required": ["zone"], "properties": { "zone": { "type": "string" }, "at": { "$ref": "#/$defs/xz" }, "y": { "type": "number" }, "size": { "type": "array", "items": { "type": "number" } }, "rot": { "type": "number" }, "tilt": { "type": "number" }, "mount": { "enum": ["post", "posts", "board", "stand", "signpost", "wall", "none", "facade"] }, "building": { "type": "string" }, "readAt": { "$ref": "#/$defs/xz" } } }
+        }
+      }
+    },
+    "items": {
+      "type": "object", "description": "предметы для сумки и лавок",
+      "additionalProperties": { "type": "object", "required": ["gr", "picto"], "properties": { "gr": { "type": "string", "description": "имя по-гречески, разметка как в репликах: [[milo|μήλο]] или простое слово из gloss" }, "picto": { "type": "string" }, "word": { "type": "string", "description": "id целевого слова, если предмет — слово из пула" } } }
+    },
+    "quests": {
+      "type": "array",
+      "items": {
+        "type": "object", "required": ["id", "npc", "ask", "thanks"],
+        "description": "просьба с пропусками (parts) или поручение kind:\"errand\" (give/want/to)",
+        "properties": {
+          "id": { "type": "string" }, "npc": { "type": "string" },
+          "kind": { "enum": ["gaps", "errand"], "description": "errand — поручение: житель даёт деньги или предмет, просит купить/отнести" },
+          "give": { "type": "object", "properties": { "money": { "type": "number" }, "item": { "type": "string" }, "n": { "type": "integer" } } },
+          "want": { "type": "object", "required": ["item"], "properties": { "item": { "type": "string" }, "n": { "type": "integer" } } },
+          "to": { "type": "string", "description": "кому отнести (по умолчанию тот, кто просил)" },
+          "remind": { "type": "string", "description": "что житель говорит, пока поручение не выполнено" },
+          "needPages": { "type": "array", "items": { "type": "string" } },
+          "after": { "$ref": "#/$defs/cond" },
+          "pic": { "oneOf": [{ "type": "string" }, { "type": "array", "items": { "type": "string" } }] },
+          "ask": { "type": "string" },
+          "parts": { "type": "array", "items": { "oneOf": [{ "type": "string" }, { "type": "object", "required": ["w", "a"], "properties": { "w": { "type": "string" }, "a": { "type": "array", "items": { "type": "string" }, "minItems": 1 }, "hint": { "type": "string" } } }] } },
+          "thanks": { "type": "string" }, "toast": { "type": "string" }, "finale": { "type": "boolean" }
+        }
+      }
+    },
+    "mystery": {
+      "type": "object", "required": ["title", "lines", "ru"],
+      "properties": {
+        "title": { "type": "string" }, "kind": { "type": "string" }, "where": { "type": "string" },
+        "look": { "enum": ["paper", "stone", "board", "scroll"] },
+        "lines": { "type": "array", "items": { "type": "string" } },
+        "ru": { "type": "array", "items": { "type": "string" } },
+        "need": { "$ref": "#/$defs/cond" },
+        "question": { "type": "object", "required": ["ask", "options", "answer"], "properties": { "ask": { "type": "string" }, "options": { "type": "array", "items": { "type": "string" } }, "answer": { "type": "string", "description": "индекс верного варианта строкой" } } },
+        "place": { "type": "object", "properties": { "zone": { "type": "string" }, "at": { "$ref": "#/$defs/xz" }, "rot": { "type": "number" }, "kind": { "enum": ["stone", "board", "bottle", "paper"] }, "y": { "type": "number" } } },
+        "solvedToast": { "type": "string" },
+        "reveal": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "finale": {
+      "type": "object", "required": ["zone", "lines", "epilogue"],
+      "properties": {
+        "zone": { "type": "string" }, "night": { "type": "boolean" }, "trigger": { "enum": ["quest", "mystery"] },
+        "hero": { "type": "array", "items": { "type": "number" } },
+        "cast": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "number" } } },
+        "camera": { "type": "object", "properties": { "at": { "$ref": "#/$defs/xz" }, "d": { "type": "number" }, "yaw": { "type": "number" }, "y": { "type": "number" } } },
+        "lines": { "type": "array", "items": { "type": "object", "required": ["who", "t"], "properties": { "who": { "type": "string" }, "t": { "type": "string" } } } },
+        "epilogue": { "type": "object", "required": ["title", "paragraphs"], "properties": { "title": { "type": "string" }, "paragraphs": { "type": "array", "items": { "type": "string" } }, "last": { "type": "string" } } }
+      }
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object", "required": ["id", "type", "src"],
+        "properties": {
+          "id": { "type": "string" },
+          "type": { "enum": ["size", "bigger", "near", "far", "price", "at", "has", "schedule", "time", "color", "offscreen"] },
+          "color": { "enum": ["red", "orange", "yellow", "green", "blue", "purple", "pink", "white", "gray", "black"] },
+          "src": { "type": "array", "items": { "type": "string" }, "description": "где это сказано: npc:<id>:<i>, sign:<id>:<i>, quest:<id>, mystery:<i>, finale:<i>" },
+          "words": { "type": "array", "items": { "type": "string" } },
+          "subject": { "type": "string" }, "is": { "enum": ["small", "big"] }, "vs": { "type": "array", "items": { "type": "string" } },
+          "a": { "type": "string" }, "b": { "type": "string" }, "by": { "type": "number" }, "metric": { "enum": ["area", "height", "width"] },
+          "max": { "type": "number" }, "min": { "type": "number" },
+          "item": { "type": "string" }, "word": { "enum": ["cheap", "expensive"] },
+          "npc": { "type": "string" }, "area": { "type": "string" }, "zone": { "type": "string" }, "ref": { "type": "string" },
+          "sign": { "type": "string" }, "day": { "type": "string" }, "open": { "type": "boolean" }, "value": { "type": "string" },
+          "note": { "type": "string" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "xz": { "type": "array", "items": { "type": "number" }, "minItems": 2, "maxItems": 2 },
+    "ground": { "enum": ["paving", "cobble", "street", "tiles", "wood", "planks", "grass", "sand", "dirt", "snow", "stone", "carpet", "none"] },
+    "cond": { "type": "object", "properties": { "quests": { "type": "array", "items": { "type": "string" } }, "pages": { "type": "array", "items": { "type": "string" } }, "allPages": { "type": "boolean" }, "mystery": { "type": "boolean" } } },
+    "zone": {
+      "type": "object", "required": ["id", "kind", "name"],
+      "properties": {
+        "id": { "type": "string" }, "kind": { "enum": ["outdoor", "interior"] }, "name": { "type": "string" }, "ru": { "type": "string" },
+        "picto": { "type": "string" }, "nav": { "type": "boolean" },
+        "center": { "$ref": "#/$defs/xz" }, "radius": { "type": "number" }, "rect": { "$ref": "#/$defs/xz" },
+        "ground": { "$ref": "#/$defs/ground" }, "tile": { "type": "number" }, "layer": { "type": "integer" }, "rim": { "type": ["string", "boolean"] },
+        "border": { "type": "object", "properties": { "type": { "enum": ["fence", "hedge", "wall", "none"] }, "gate": { "type": "number", "description": "угол калитки: 0 — +x (восток), π/2 — +z (юг), -π/2 — -z (север)" }, "gateW": { "type": "number" }, "h": { "type": "number" }, "model": { "type": "string" }, "gateModel": { "type": "string" } } },
+        "lock": { "oneOf": [{ "$ref": "#/$defs/cond" }, { "type": "null" }] },
+        "spawn": { "type": "object", "properties": { "at": { "$ref": "#/$defs/xz" }, "yaw": { "type": "number" } } },
+        "camera": { "oneOf": [{ "const": "free" }, { "type": "object", "properties": { "yaw": { "type": "number", "description": "откуда смотрит камера, радианы: 0 — камера с +z (юга) смотрит на север, π — с севера на юг, π/2 — с +x (востока) на запад" }, "pitch": { "type": "number", "description": "наклон, радианы: 0.62 по умолчанию, 0.85 — интерьер" }, "d": { "type": "number", "description": "дистанция при обычном виде (по умолчанию самый дальний — world.zoomMax, 19); колесо приближает пропорционально" } } }], "description": "ракурс камеры локации; по умолчанию — со спины героя в точке spawn; \"free\" — камера идёт за героем (так же по умолчанию у зон с nav:false)" },
+        "fireflies": { "type": "boolean" },
+        "size": { "$ref": "#/$defs/xz" }, "wall": { "type": "string" }, "wallH": { "type": "number" }, "floor": { "$ref": "#/$defs/ground" }, "window": { "type": "boolean" }, "light": { "type": "number" },
+        "areas": { "type": "array", "items": { "type": "object", "required": ["id", "rect"], "properties": { "id": { "type": "string" }, "rect": { "type": "array", "items": { "type": "number" }, "minItems": 4, "maxItems": 4 }, "floor": { "$ref": "#/$defs/ground" } } } },
+        "props": { "type": "array", "items": { "$ref": "#/$defs/prop" } }
+      }
+    },
+    "prop": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "m": { "type": "string", "description": "модель из assets/catalog.json (kit/name)" },
+        "p": { "enum": ["building", "tree", "lamp", "table", "violin", "column", "dog", "cat", "fountain", "kiosk", "stall", "crates", "steam", "pier", "boat", "pile", "pricetag", "box", "cyl", "light", "ring", "strip", "repeat"] },
+        "roof": { "type": "string" }, "trim": { "type": "string" }, "len": { "type": "number" }, "mast": { "type": "boolean" }, "float": { "type": "boolean" }, "stripe": { "type": "string" }, "inner": { "type": "string" }, "crate": { "type": "boolean" },
+        "at": { "$ref": "#/$defs/xz" }, "y": { "type": "number" }, "rot": { "type": "number" },
+        "h": { "type": "number" }, "w": { "type": "number" }, "s": { "type": "number" },
+        "col": { "description": "\"b\" — коробка по габаритам, число — радиус круга, false — не мешает ходить" },
+        "shrink": { "type": "number" }, "block": { "type": "boolean" }, "sway": { "type": "boolean" },
+        "on": { "type": "array", "items": { "$ref": "#/$defs/prop" } }, "onY": { "type": "number" },
+        "door": { "type": "object", "required": ["to"], "properties": { "to": { "type": "string" }, "x": { "type": "number" }, "camera": { "type": "object", "description": "ракурс на выходе из здания (по умолчанию — снаружи, лицом к фасаду, pitch 0.8); держится, пока герой не отойдёт на 5 м", "properties": { "yaw": { "type": "number" }, "pitch": { "type": "number" }, "d": { "type": "number" } } } } },
+        "deco": { "type": "array", "items": { "type": "object", "properties": { "p": { "enum": ["portico", "kitchen-annex", "awning", "pad", "nameplate"] } } } },
+        "text": { "type": "string" }, "value": { "type": "number" },
+        "size": { "type": "array", "items": { "type": "number" } }, "color": { "type": "string" },
+        "food": { "type": "array" }, "fruit": { "type": "string" }, "seed": { "type": "number" },
+        "light": { "type": "boolean" }, "walk": { "type": "number" }, "r": { "type": "number" },
+        "rect": { "$ref": "#/$defs/xz" }, "n": { "type": "integer" }, "step": { "$ref": "#/$defs/xz" }, "item": { "type": "object" },
+        "nightOnly": { "type": "boolean" }, "dayOnly": { "type": "boolean" }
+      }
+    }
+  }
+}

@@ -1,0 +1,192 @@
+{
+ "words": {
+  "agora": {
+   "gr": "η αγορά",
+   "ru": "рынок",
+   "alt": [],
+   "pos": "noun",
+   "gender": "f"
+  },
+  "limani": {
+   "gr": "το λιμάνι",
+   "ru": "порт, гавань",
+   "alt": [
+    "порт",
+    "гавань"
+   ],
+   "pos": "noun",
+   "gender": "n"
+  },
+  "fournos": {
+   "gr": "ο φούρνος",
+   "ru": "пекарня",
+   "alt": [],
+   "pos": "noun",
+   "gender": "m"
+  },
+  "thalassa": {
+   "gr": "η θάλασσα",
+   "ru": "море",
+   "alt": [],
+   "pos": "noun",
+   "gender": "f"
+  },
+  "psari": {
+   "gr": "το ψάρι",
+   "ru": "рыба",
+   "alt": [],
+   "pos": "noun",
+   "gender": "n"
+  },
+  "psomi": {
+   "gr": "το ψωμί",
+   "ru": "хлеб",
+   "alt": [],
+   "pos": "noun",
+   "gender": "n"
+  },
+  "tyri": {
+   "gr": "το τυρί",
+   "ru": "сыр",
+   "alt": [],
+   "pos": "noun",
+   "gender": "n"
+  },
+  "milo": {
+   "gr": "το μήλο",
+   "ru": "яблоко",
+   "alt": [],
+   "pos": "noun",
+   "gender": "n"
+  },
+  "domata": {
+   "gr": "η ντομάτα",
+   "ru": "помидор",
+   "alt": [],
+   "pos": "noun",
+   "gender": "f"
+  },
+  "kokkinos": {
+   "gr": "κόκκινος, -η, -ο",
+   "ru": "красный",
+   "alt": [],
+   "pos": "adj"
+  },
+  "prasinos": {
+   "gr": "πράσινος, -η, -ο",
+   "ru": "зелёный",
+   "alt": [],
+   "pos": "adj"
+  },
+  "ble": {
+   "gr": "μπλε",
+   "ru": "синий",
+   "alt": [],
+   "pos": "adv"
+  },
+  "kitrinos": {
+   "gr": "κίτρινος, -η, -ο",
+   "ru": "жёлтый",
+   "alt": [],
+   "pos": "adj"
+  },
+  "agorazo": {
+   "gr": "αγοράζω",
+   "ru": "покупать",
+   "alt": [],
+   "pos": "verb"
+  },
+  "poulao": {
+   "gr": "πουλάω",
+   "ru": "продавать",
+   "alt": [],
+   "pos": "verb"
+  },
+  "poso_kani": {
+   "gr": "πόσο κάνει;",
+   "ru": "сколько стоит?",
+   "alt": [
+    "сколько стоит"
+   ],
+   "pos": "phrase"
+  },
+  "lefta": {
+   "gr": "τα λεφτά",
+   "ru": "деньги",
+   "alt": [],
+   "pos": "noun",
+   "gender": "pl"
+  },
+  "ena_kilo": {
+   "gr": "ένα κιλό",
+   "ru": "килограмм",
+   "alt": [],
+   "pos": "phrase"
+  },
+  "psaras": {
+   "gr": "ο ψαράς",
+   "ru": "рыбак",
+   "alt": [],
+   "pos": "noun",
+   "gender": "m"
+  },
+  "varka": {
+   "gr": "η βάρκα",
+   "ru": "лодка",
+   "alt": [],
+   "pos": "noun",
+   "gender": "f"
+  },
+  "freskos": {
+   "gr": "φρέσκος, -ια, -ο",
+   "ru": "свежий",
+   "alt": [],
+   "pos": "adj"
+  },
+  "proi": {
+   "gr": "το πρωί",
+   "ru": "утро",
+   "alt": [],
+   "pos": "noun",
+   "gender": "n"
+  },
+  "makria": {
+   "gr": "μακριά",
+   "ru": "далеко",
+   "alt": [],
+   "pos": "adv"
+  },
+  "thelo": {
+   "gr": "θέλω",
+   "ru": "хотеть",
+   "alt": [],
+   "pos": "verb"
+  }
+ },
+ "order": [
+  "agora",
+  "limani",
+  "fournos",
+  "thalassa",
+  "psari",
+  "psomi",
+  "tyri",
+  "milo",
+  "domata",
+  "kokkinos",
+  "prasinos",
+  "ble",
+  "kitrinos",
+  "agorazo",
+  "poulao",
+  "poso_kani",
+  "lefta",
+  "ena_kilo",
+  "psaras",
+  "varka",
+  "freskos",
+  "proi",
+  "makria",
+  "thelo"
+ ]
+}
