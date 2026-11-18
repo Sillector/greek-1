@@ -9,7 +9,7 @@ const problems = [];
 const say = (s) => console.log(s);
 
 // (1) синтаксис
-const jsFiles = ["js/data.js", "js/logic.js", "js/art.js", "js/sound.js", "js/ui.js", "tools/verify.js"].filter((f) => fs.existsSync(path.join(root, f)));
+const jsFiles = ["js/data.js", "js/logic.js", "js/art.js", "js/sound.js", "js/ui.js", "js/world.js", "js/models.js", "js/lib/three.min.js", "js/lib/GLTFLoader.js", "tools/verify.js", "tools/pack-models.js"].filter((f) => fs.existsSync(path.join(root, f)));
 for (const f of jsFiles) {
     try { new vm.Script(fs.readFileSync(path.join(root, f), "utf8"), { filename: f }); }
     catch (e) { problems.push(`синтаксис ${f}: ${e.message}`); }
@@ -145,6 +145,29 @@ while (guard++ < 200) {
 const finaleOpen = G.allSealed(st) && G.QUESTS.every((q) => st.quests[q.id]);
 say(`(5) прогон: порядок ${order.join(" ")}; финал ${finaleOpen ? "открывается" : "НЕ открывается"}`);
 if (!finaleOpen) { problems.push("финал не открывается"); }
+
+// (6) 3D: модели из кода есть в models.js, размер в пределах, у каждого жителя и таблички есть место в квартале
+{
+    const worldSrc = fs.readFileSync(path.join(root, "js/world.js"), "utf8");
+    const mjs = fs.readFileSync(path.join(root, "js/models.js"), "utf8");
+    const mctx = { window: {} }; vm.createContext(mctx); vm.runInContext(mjs, mctx);
+    const have = new Set(Object.keys(mctx.window.MODELS.glb));
+    const refs = new Set((worldSrc.match(/"(chars|sub|com|food|nat|furn)\/[A-Za-z0-9_-]+"/g) || []).map((s) => s.slice(1, -1)));
+    // составные имена: "nat/" + цветы, "food/" + блюда на столах, кастрюли
+    for (const m of worldSrc.matchAll(/\["(flower_[A-Za-z]+|tree_[A-Za-z]+)"/g)) { refs.add("nat/" + m[1]); }
+    for (const m of worldSrc.matchAll(/\[\["([a-z-]+)", /g)) { refs.add("food/" + m[1]); }
+    for (const m of worldSrc.matchAll(/\["([a-z-]+)", -?[0-9.]+, -?[0-9.]+(, [0-9.]+)?\]/g)) { refs.add("food/" + m[1]); }
+    refs.add("food/pan-stew"); refs.add("food/pot-stew");
+    const missing = [...refs].filter((k) => !have.has(k));
+    const mb = fs.statSync(path.join(root, "js/models.js")).size / 1048576;
+    const npcPlaced = Object.keys(G.NPCS).filter((id) => new RegExp('addNpc\\("' + id + '"').test(worldSrc));
+    const signPlaced = Object.keys(G.SIGNS).filter((id) => new RegExp('signPanel\\("' + id + '"').test(worldSrc));
+    say(`(6) 3D: моделей в коде ${refs.size}, в models.js ${have.size}, нет: ${missing.length}; models.js ${mb.toFixed(2)} МБ; жителей в квартале ${npcPlaced.length}/${Object.keys(G.NPCS).length}, табличек ${signPlaced.length}/${Object.keys(G.SIGNS).length}`);
+    for (const k of missing) { problems.push(`модель ${k} не упакована в models.js`); }
+    if (mb > 30) { problems.push(`models.js больше 30 МБ: ${mb.toFixed(1)}`); }
+    for (const id of Object.keys(G.NPCS)) { if (!npcPlaced.includes(id)) { problems.push(`житель ${id} не поставлен в 3D`); } }
+    for (const id of Object.keys(G.SIGNS)) { if (!signPlaced.includes(id)) { problems.push(`табличка ${id} не повешена в 3D`); } }
+}
 
 if (problems.length) {
     console.log("\nПРОБЛЕМЫ (" + problems.length + "):\n" + problems.join("\n"));

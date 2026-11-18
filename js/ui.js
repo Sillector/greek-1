@@ -10,6 +10,9 @@
     var journalTab = "pages";
     var activeGap = null;       // поле ввода в окне просьбы
     var currentNpc = null;
+    var use3d = false;          // 3D-квартал готов (иначе — запасная 2D-сцена)
+    var bubbleNpc = null;       // над кем висит реплика
+    var finaleWho = null;       // кто говорит в финале
 
     // ---------------------------------------------------------------- сохранение
     function load() {
@@ -176,8 +179,8 @@
     }
 
     function renderScene() {
-        var stage = $("#scene-holder");
-        stage.innerHTML = ART.scene(st.loc, st, markers());
+        if (use3d) { WORLD.show(st.loc, st, markers()); }
+        else { var old = $("#scene-svg"); if (old) { old.innerHTML = ART.scene(st.loc, st, markers()); } }
         hideBubble();
         renderPlaces();
         renderTop();
@@ -195,10 +198,11 @@
 
     function go(loc) {
         if (!locUnlocked(st, loc)) { toast("Туда пока не пройти. Помогите жителям — и квартал откроется.", "muted"); SOUND.thud(); return; }
-        if (loc === st.loc) { return; }
+        if (loc === st.loc && !use3d) { return; }
         hideBubble(true);
         st.loc = loc; save();
         SOUND.click();
+        if (use3d) { hideBubble(true); WORLD.travel(loc); return; }
         $("#scene-holder").classList.add("fade");
         setTimeout(function () { renderScene(); $("#scene-holder").classList.remove("fade"); }, 180);
     }
@@ -213,12 +217,15 @@
             save();
         }
         b.classList.remove("on");
+        if (use3d && currentNpc) { WORLD.calm(currentNpc); }
         currentNpc = null;
+        bubbleNpc = null;
         closeWordPop();
         SPEECH.stop();
     }
 
     function placeBubble(npcId) {
+        if (use3d) { bubbleNpc = npcId; WORLD.talk(npcId); positionBubble(); return; }
         var n = NPCS[npcId];
         var b = $("#bubble");
         var right = n.x > 55;
@@ -227,6 +234,34 @@
         b.style.left = right ? "auto" : Math.max(1, n.x - 4) + "%";
         b.style.right = right ? Math.max(1, 100 - n.x - 4) + "%" : "auto";
         b.classList.toggle("right", right);
+    }
+
+    // реплика висит над головой жителя и едет за ним вместе с камерой
+    function positionBubble() {
+        if (!bubbleNpc) { return; }
+        var a = WORLD.anchor(bubbleNpc);
+        var b = $("#bubble");
+        if (!a || a.behind) { return; }
+        var bw = b.offsetWidth, bh = b.offsetHeight;
+        var right = a.x > a.w * 0.58;
+        var left = right ? a.x - bw + 34 : a.x - 34;
+        left = Math.max(8, Math.min(a.w - bw - 8, left));
+        var top = Math.max(8, Math.min(a.h - bh - 8, a.y - bh - 16));
+        b.style.left = left + "px"; b.style.top = top + "px"; b.style.right = "auto"; b.style.bottom = "auto";
+        b.style.setProperty("--tail", Math.max(14, Math.min(bw - 34, a.x - left - 10)) + "px");
+        b.classList.toggle("tail-off", a.y - bh - 16 < 8);
+    }
+    function positionFinale() {
+        if (!finaleWho) { return; }
+        var fb = $("#f-bubble"), a = WORLD.anchor(finaleWho, 2.0);
+        if (!fb || !a) { return; }
+        var sr = $("#stage").getBoundingClientRect();
+        var bw = fb.offsetWidth, bh = fb.offsetHeight;
+        var x = sr.left + a.x, y = sr.top + a.y;
+        var left = finaleWho === "eleni" ? x - bw + 40 : x - 40;
+        left = Math.max(12, Math.min(window.innerWidth - bw - 12, left));
+        fb.style.left = left + "px"; fb.style.top = Math.max(76, y - bh - 18) + "px";
+        fb.style.setProperty("--tail", Math.max(14, Math.min(bw - 34, x - left - 10)) + "px");
     }
 
     function seeText(str) {
@@ -833,14 +868,22 @@
                 POSTCARD.forEach(seeText);
                 showStory('<div class="postcard small"><div class="pc-stamp"></div><div class="pc-lines gr">' + POSTCARD.map(function (l) { return '<div class="pc-line">' + renderLine(l) + "</div>"; }).join("") + "</div></div>" +
                     '<p class="s-hint">Наведите на слова. Простые слова подскажут перевод сразу. <span class="hl">Подсвеченные</span> — незнакомые: их значение придётся понять в квартале и записать в дневник.</p>',
-                    "Войти в квартал", function () { st.intro = true; save(); closeOverlay("#story"); renderScene(); toast("Нажимайте на жителей и таблички. Слушайте, смотрите, догадывайтесь.", "muted"); });
+                    "Войти в квартал", function () { st.intro = true; save(); closeOverlay("#story"); renderScene(); if (use3d) { showControls(); } else { toast("Нажимайте на жителей и таблички. Слушайте, смотрите, догадывайтесь.", "muted"); } });
             });
     }
 
     function startFinale() {
         st.finale = true; save();
         var fs = $("#finale");
-        fs.innerHTML = '<div class="f-stage">' + ART.finaleScene() + '<div class="f-bubble" id="f-bubble"></div></div><div class="f-foot"><button type="button" class="btn primary" id="f-next">Дальше ›</button></div>';
+        if (use3d) {
+            hideBubble();
+            fs.innerHTML = '<div class="f-bubble" id="f-bubble"></div><div class="f-foot"><button type="button" class="btn primary" id="f-next">Дальше ›</button></div>';
+            fs.classList.add("world");
+            document.body.classList.add("finale-on");
+            WORLD.finale(true);
+        } else {
+            fs.innerHTML = '<div class="f-stage">' + ART.finaleScene() + '<div class="f-bubble" id="f-bubble"></div></div><div class="f-foot"><button type="button" class="btn primary" id="f-next">Дальше ›</button></div>';
+        }
         fs.classList.add("on");
         document.body.classList.add("modal");
         SOUND.seal();
@@ -852,6 +895,7 @@
             var b = $("#f-bubble");
             b.className = "f-bubble on " + (f.who === "eleni" ? "left" : "right");
             b.innerHTML = '<div class="b-name">' + esc(NPCS[f.who].name) + '</div><div class="gr">' + renderLine(f.t) + speakBtn(f.t, f.who) + "</div>";
+            if (use3d) { finaleWho = f.who; WORLD.say(f.who); positionFinale(); }
             SPEECH.say(plain(f.t), NPCS[f.who]);
         }
         $("#f-next").onclick = function () { SOUND.click(); step(); };
@@ -860,6 +904,7 @@
 
     function epilogue() {
         $("#finale").classList.remove("on");
+        if (use3d) { finaleWho = null; $("#finale").classList.remove("world"); document.body.classList.remove("finale-on"); WORLD.finale(false); }
         showStory('<h2>Сорок лет — двести шагов</h2>' +
             "<p>Элени написала эту открытку Никосу давным-давно: «Каждую субботу вечером я играю в парке. Жду тебя там». И забыла её в библиотечной книге. Открытка так и не ушла.</p>" +
             "<p>А Никос все эти годы ждал её в своём ресторане — по субботам, в полдень, на их старом месте. Она ждала его в парке — по субботам, вечером. Двести шагов и несколько часов.</p>" +
@@ -994,15 +1039,87 @@
         SOUND.setOn(st.sound);
         $("#cover").classList.add("gone");
         $("#app").classList.remove("hidden");
+        document.body.classList.remove("cover-on");
         st.started = true; save();
         renderScene();
         if (!st.intro) { startIntro(); }
         if (st.finale) { toast("Вы уже прошли историю. Повторение — в дневнике.", "muted"); }
     }
-    $("#cover-art").innerHTML = ART.cover();
-    $("#btn-start").textContent = st.intro ? "Продолжить" : "Начать";
-    $("#btn-start").addEventListener("click", begin);
+    // ---------------------------------------------------------------- 3D-квартал
+    // подошли к табличке — её текст всплывает крупно (кликабельные слова, подсказки, озвучка)
+    var peekId = null;
+    function signPeek() {
+        var n = WORLD.near(), id = n && n.kind === "sign" && !document.body.classList.contains("modal") ? n.id : null;
+        if (id === peekId) { return; }
+        peekId = id;
+        var box = $("#sign-peek");
+        if (!id) { box.classList.remove("on"); return; }
+        var s = SIGNS[id];
+        s.lines.forEach(seeText);
+        s.lines.forEach(function (l) { hear("sign:" + id, l); });
+        save();
+        box.className = "sign-peek " + s.style;
+        box.innerHTML = '<div class="sp-title">' + esc(s.title) + '<span>подошли поближе — читайте; наведите на слово</span></div>' +
+            s.lines.map(function (l) { return '<div class="sp-line gr">' + renderLine(l) + speakBtn(l) + "</div>"; }).join("");
+        box.classList.remove("on"); void box.offsetWidth; box.classList.add("on");
+    }
+    function fallback2d() {
+        use3d = false;
+        document.body.classList.add("no3d");
+        $("#scene-holder").innerHTML = '<div id="scene-svg"></div>';
+        $("#cover-art").innerHTML = ART.cover();
+        startReady();
+    }
+    function startReady() {
+        var btn = $("#btn-start");
+        btn.disabled = false;
+        btn.textContent = st.intro ? "Продолжить" : "Начать";
+        $(".cover-note").textContent = use3d ? "со звуком · прогресс сохраняется · мышью можно вращать квартал" : "со звуком · прогресс сохраняется";
+    }
+    if (window.WORLD && WORLD.init) {
+        WORLD.init($("#scene-holder"), function (ok) {
+            if (!ok) { fallback2d(); return; }
+            use3d = true;
+            document.body.classList.add("w3d");
+            WORLD.show(st.loc, st, markers());
+            startReady();
+        });
+        WORLD.onPick(function (a) {
+            if (a.kind === "npc") { talk(a.id); }
+            else if (a.kind === "sign") { hideBubble(true); openSign(a.id); }
+        });
+        // герой сам дошёл до другого места квартала
+        WORLD.onLoc(function (loc) {
+            if (!st.started) { return; }
+            st.loc = loc; save();
+            renderPlaces();
+            var l = LOCS.filter(function (x) { return x.id === loc; })[0];
+            $("#loc-name").innerHTML = renderLine(l.name);
+        });
+        WORLD.onLocked(function (loc) { hideBubble(true); toast("Заперто. Помогите жителям — и квартал откроется.", "muted"); SOUND.thud(); });
+        WORLD.onFrame(function () {
+            positionBubble(); positionFinale(); signPeek();
+            // отошли от жителя — разговор закрывается и начнётся сначала
+            if (currentNpc && $("#bubble").classList.contains("on") && WORLD.dist(currentNpc) > 4.2) { hideBubble(true); }
+        });
+    } else { fallback2d(); }
+    $("#btn-start").disabled = true;
+    $("#btn-start").textContent = "Строим квартал…";
+    $("#btn-start").addEventListener("click", function () {
+        if (use3d) { WORLD.cover(false); WORLD.start(st.loc); }
+        var fresh = !st.intro;
+        begin();
+        if (use3d && !fresh) { showControls(); }
+    });
+    function showControls() {
+        var c = $("#controls");
+        if (!c) { return; }
+        c.classList.add("on");
+        clearTimeout(showControls.t);
+        showControls.t = setTimeout(function () { c.classList.remove("on"); }, 14000);
+    }
+    document.addEventListener("click", function (e) { if (e.target.closest && e.target.closest("#controls")) { $("#controls").classList.remove("on"); } if (e.target.closest && e.target.closest(".world-hint")) { showControls(); } });
 
     // для отладки и снимков экрана
-    window.__G = { openVoices: openVoices, rv: rv, st: st, render: renderScene, openJournal: openJournal, openQuest: openQuest, openSign: openSign, talk: talk, go: go, begin: begin, save: save, startFinale: startFinale, seeText: seeText };
+    window.__G = { world: window.WORLD, openVoices: openVoices, rv: rv, st: st, render: renderScene, openJournal: openJournal, openQuest: openQuest, openSign: openSign, talk: talk, go: go, begin: begin, save: save, startFinale: startFinale, seeText: seeText };
 })();

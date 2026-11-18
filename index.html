@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Λεμονιές — Лимонный квартал</title>
+<title>Λεμονιές 3D — Лимонный квартал</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cellipse cx='16' cy='17' rx='12' ry='9' fill='%23f4c84a' stroke='%232b2a33' stroke-width='2'/%3E%3Cpath d='M16 8c3-5 8-5 10-3-3 2-6 3-10 3z' fill='%235e8c3a'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="cover-on">
 
 <div id="cover">
     <div id="cover-art"></div>
@@ -16,11 +16,11 @@
         <h1><span class="gr">Λεμονιές</span><small>Лимонный квартал</small></h1>
         <p>Маленький греческий квартал, старая открытка и пятьдесят слов, которые вам предстоит понять самим — по лицам, вывескам и делам здешних жителей.</p>
         <button type="button" class="btn primary big" id="btn-start">Начать</button>
-        <div class="cover-note">со звуком · прогресс сохраняется</div>
+        <div class="cover-note">загружаем модели…</div>
     </div>
 </div>
 
-<div id="app" class="hidden">
+<div id="app">
     <header id="top">
         <div class="brand"><span class="lemon"></span><span class="gr">Λεμονιές</span></div>
         <div class="where" id="loc-name"></div>
@@ -37,6 +37,19 @@
         <div id="stage">
             <div id="scene-holder"></div>
             <div id="bubble" class="bubble"></div>
+            <div class="world-hint" title="Показать управление"><b>WASD</b> — идти · <b>E</b> — говорить · <b>?</b> управление</div>
+            <div id="sign-peek" class="sign-peek"></div>
+            <div id="controls" class="controls">
+                <div class="c-title">Управление</div>
+                <div class="c-row"><b>W A S D</b> или <b>стрелки</b> — идти, <b>Shift</b> — бегом</div>
+                <div class="c-row"><b>Клик по земле</b> — путник сам дойдёт туда</div>
+                <div class="c-row"><b>Клик по жителю или табличке</b> — подойти и поговорить / прочитать</div>
+                <div class="c-row"><b>E</b> или <b>пробел</b> рядом — поговорить с жителем / открыть табличку во весь экран</div>
+                <div class="c-row"><b>Правая кнопка мыши</b> (тянуть) или <b>Q / E</b> — повернуть камеру</div>
+                <div class="c-row"><b>Колесо</b> — ближе / дальше</div>
+                <div class="c-row"><b>Двери</b> — просто войдите в них. Запертые откроются по ходу истории</div>
+                <div class="c-note">нажмите, чтобы закрыть · вернуть подсказку — кнопка «?» слева вверху</div>
+            </div>
         </div>
         <nav id="places"></nav>
     </main>
@@ -66,10 +79,14 @@
 <div id="wordpop" class="wordpop" role="dialog" aria-label="Догадка о слове"></div>
 <div id="toasts"></div>
 
+<script src="js/lib/three.min.js"></script>
+<script src="js/lib/GLTFLoader.js"></script>
+<script src="js/models.js"></script>
 <script src="js/data.js"></script>
 <script src="js/logic.js"></script>
 <script src="js/art.js"></script>
 <script src="js/sound.js"></script>
+<script src="js/world.js"></script>
 <script src="js/ui.js"></script>
 </body>
 </html>

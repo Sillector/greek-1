@@ -534,3 +534,92 @@ button { font: inherit; cursor: pointer; }
 .slot.hint-on { border-color: var(--blue); box-shadow: 0 0 0 4px rgba(91, 155, 209, .35); }
 .slot-tip { position: absolute; left: 6px; right: 6px; top: -14px; z-index: 2; text-align: center; font: 13px var(--read); color: #fff; background: var(--blue); border-radius: 8px; padding: 3px 6px; }
 .p-foot { flex-wrap: wrap; }
+
+/* ================================================================ 3D-квартал */
+.w3d #main { position: relative; padding: 0; }
+.w3d #stage { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; max-width: none; border: 0; border-radius: 0; box-shadow: none; background: #b9def2; }
+.w3d #scene-holder { transition: none; }
+.world-canvas { display: block; width: 100%; height: 100%; touch-action: none; cursor: grab; }
+.w3d #places { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 6; width: max-content; max-width: 96%; flex-wrap: nowrap; background: rgba(43, 42, 51, .55); padding: 8px 10px; border-radius: 18px; backdrop-filter: blur(4px); }
+.hover-label {
+    position: absolute; z-index: 6; pointer-events: none;
+    background: rgba(43, 42, 51, .88); color: #fffaf0; font: 600 14px var(--read);
+    padding: 5px 11px; border-radius: 10px; white-space: nowrap;
+    opacity: 0; transition: opacity .12s;
+}
+.hover-label.on { opacity: 1; }
+.world-hint { display: none; }
+.w3d .world-hint { display: block; position: absolute; left: 14px; top: 12px; z-index: 4; pointer-events: none; font: 13px var(--read); color: #2b2a33; background: rgba(255, 250, 240, .72); padding: 5px 10px; border-radius: 10px; }
+.w3d .bubble { max-width: min(470px, 48%); }
+.w3d .bubble::after, .w3d .bubble.right::after { left: var(--tail, 22px); right: auto; }
+.w3d .bubble.tail-off::after { display: none; }
+/* обложка поверх живого квартала */
+.w3d #cover { background: radial-gradient(ellipse at 50% 40%, rgba(255, 245, 225, 0) 35%, rgba(43, 30, 20, .35) 100%); }
+.w3d #cover-art { display: none; }
+.cover-on #top, .cover-on #places, .cover-on .world-hint { visibility: hidden; }
+#btn-start:disabled { opacity: .6; cursor: wait; }
+/* финал в 3D: вечерний парк, реплики над героями */
+.finale.world { background: radial-gradient(ellipse at 50% 55%, rgba(5, 8, 25, 0) 45%, rgba(5, 8, 25, .55) 100%); }
+.finale.world .f-bubble { position: fixed; max-width: 420px; }
+.finale.world .f-bubble.left, .finale.world .f-bubble.right { right: auto; }
+.finale.world .f-bubble::after { content: ""; position: absolute; left: var(--tail, 22px); bottom: -22px; border: 9px solid transparent; border-top: 12px solid var(--ink); }
+.finale.world .f-foot { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%); }
+.no3d .world-hint { display: none; }
+
+/* ---- герой, подсказки управления, затемнение при входе в дверь */
+.world-fade { position: absolute; inset: 0; z-index: 7; background: #120d0a; opacity: 0; pointer-events: none; transition: opacity .3s; }
+.world-fade.on { opacity: 1; }
+.world-prompt {
+    position: absolute; z-index: 5; transform: translateX(-50%); pointer-events: none;
+    background: rgba(255, 250, 240, .95); color: #2b2a33; border: 2px solid #2b2a33; border-radius: 12px;
+    font: 600 15px var(--read); padding: 5px 12px; white-space: nowrap; box-shadow: 0 6px 16px rgba(0, 0, 0, .25);
+    opacity: 0; transition: opacity .15s;
+}
+.world-prompt.on { opacity: 1; }
+.world-prompt b { display: inline-block; min-width: 22px; text-align: center; background: #2b2a33; color: #f4c84a; border-radius: 6px; padding: 0 5px; margin-right: 4px; }
+.world-prompt span { font-weight: 400; opacity: .6; font-size: 13px; }
+.w3d .world-hint { pointer-events: auto; cursor: pointer; }
+.world-hint b { background: rgba(43, 42, 51, .85); color: #f4c84a; border-radius: 5px; padding: 0 5px; }
+.controls {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(.96); z-index: 8;
+    width: min(520px, 92%); background: rgba(255, 250, 240, .97); border: 3px solid #2b2a33; border-radius: 18px;
+    padding: 18px 24px 14px; box-shadow: 0 16px 40px rgba(0, 0, 0, .4); font: 16px var(--read); color: #2b2a33;
+    opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s; cursor: pointer;
+}
+.controls.on { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%); }
+.controls .c-title { font: 700 13px var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--terra); margin-bottom: 10px; }
+.controls .c-row { padding: 5px 0; border-bottom: 1px dashed #e3d5b8; line-height: 1.4; }
+.controls .c-row b { background: #2b2a33; color: #f4c84a; border-radius: 6px; padding: 1px 6px; font-weight: 600; }
+.controls .c-note { margin-top: 10px; font-size: 13px; opacity: .6; text-align: center; }
+
+.finale-on #places, .finale-on .world-hint { visibility: hidden; }
+
+/* ---- текст таблички крупно, когда герой рядом */
+.sign-peek {
+    position: absolute; left: 16px; bottom: 92px; z-index: 6; width: min(560px, 46%);
+    background: #fffdf6; color: #231f1c; border: 4px solid #8c6447; border-radius: 16px;
+    padding: 12px 20px 14px; box-shadow: 0 14px 34px rgba(0, 0, 0, .35);
+    opacity: 0; transform: translateY(12px); pointer-events: none; transition: opacity .2s, transform .2s;
+}
+.sign-peek.on { opacity: 1; transform: none; pointer-events: auto; }
+.sign-peek.plate { border-color: #2f6fa3; }
+.sign-peek.chalk { border-color: #2f4a3a; }
+.sign-peek.paper, .sign-peek.cork { border-color: #c9b48c; }
+.sp-title { font: 700 12px var(--sans); letter-spacing: .16em; text-transform: uppercase; color: var(--terra); margin-bottom: 6px; }
+.sp-title span { margin-left: 10px; letter-spacing: 0; text-transform: none; font-weight: 400; color: #8a7a66; }
+.sp-line { font-size: 24px; line-height: 1.5; font-weight: 600; }
+
+/* ---- 3D: карточка таблички — светлое поле, тёмный крупный текст (как и сами таблички) */
+.w3d .sign-card { transform: none; font-size: 22px; }
+.w3d .sign-card .sign-line { font-size: 26px; font-weight: 600; line-height: 1.55; }
+.w3d .sign-card.wood { background: #fdf6e6; color: #231f1c; border: 8px solid #8c6447; }
+.w3d .sign-card.plate { background: #ffffff; color: #14304f; border: 8px solid #2f6fa3; }
+.w3d .sign-card.chalk { background: #fbfaf4; color: #1d2a24; border: 8px solid #2f4a3a; }
+.w3d .sign-card.chalk .sign-title { color: inherit; }
+.w3d .sign-card.chalk .gw.t.unknown { color: var(--unknown); }
+.w3d .sign-card.chalk .gw.t.guessed { color: var(--guess); }
+.w3d .sign-card.chalk .gw.t.known { color: var(--known); }
+.w3d .sign-card.chalk .gw.g { border-color: rgba(0, 0, 0, .25); }
+.w3d .sign-card.paper { background: #fffdf6; border: 8px solid #c9b48c; }
+.w3d .sign-card.cork { background: #fffdf6; border: 8px solid #a77a4c; }
+.w3d .sign-card.cork .sign-line { background: none; box-shadow: none; margin: 0; padding: 0; }

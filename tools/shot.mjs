@@ -1,5 +1,5 @@
 // Снимки экрана безголовым Chrome через CDP.
-// node --experimental-websocket tools/shot.mjs plan.json outDir
+// node --experimental-websocket tools/shot.mjs plan.json outDir   (WebGL — программный swiftshader)
 // plan: { url, width, height, steps: [{ eval?, wait?, shot? }] }
 import { spawn } from "node:child_process";
 import fs from "node:fs";
@@ -9,14 +9,15 @@ import os from "node:os";
 const [planFile, outDir] = process.argv.slice(2);
 const plan = JSON.parse(fs.readFileSync(planFile, "utf8"));
 fs.mkdirSync(outDir, { recursive: true });
-const port = plan.port || 9341;
-const profile = path.join(os.tmpdir(), "lemonies-shot-profile-" + port);
+const port = plan.port || 9352; // свой порт 9350–9359 — не подключаемся к чужим браузерам
+const profile = path.join(os.tmpdir(), "lemonies3d-shot-profile-" + port);
+try { await fetch(`http://127.0.0.1:${port}/json/version`); console.error("порт " + port + " уже занят чужим браузером — выберите другой"); process.exit(2); } catch { /* свободен */ }
 const chromePaths = ["C:/Program Files/Google/Chrome/Application/chrome.exe", "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe", "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe"];
 const exe = chromePaths.find((p) => fs.existsSync(p));
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const chrome = spawn(exe, ["--headless=new", `--remote-debugging-port=${port}`, `--user-data-dir=${profile}`, "--no-first-run", "--no-default-browser-check",
-    "--hide-scrollbars", "--disable-extensions", "--mute-audio", `--window-size=${plan.width || 1400},${plan.height || 900}`, "about:blank"], { stdio: "ignore" });
+    "--hide-scrollbars", "--disable-extensions", "--mute-audio", "--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist", `--window-size=${plan.width || 1400},${plan.height || 900}`, "about:blank"], { stdio: "ignore" });
 
 let ver = null;
 for (let i = 0; i < 100 && !ver; i++) {
